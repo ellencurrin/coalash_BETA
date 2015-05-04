@@ -43,19 +43,19 @@ function main() {
                         color: '#fff', 
                         opacity: 1,
                         weight: 1,
-                        fillColor: '#C2D193',
+                        fillColor: '#C3CC8F',//'#C2D193',
                         fillOpacity: .4,
                     });
                     
                     polygon.on('click', function(e){    
                         map.fitBounds(polygon.getBounds())
                         states.setStyle({
-                            weight: 3,
+                            weight: 1,
                             fillColor: '#C3C3BE',
                             fillOpacity: .4,
                         });
                         e.layer.setStyle ( {
-                            weight: 2, 
+                            weight: 1, 
                             fillOpacity: 0, 
                         });
                     })
@@ -77,7 +77,7 @@ function main() {
                         color: '#fff', 
                         opacity: 1,
                         weight: 1,
-                        fillColor: '#fff',
+                        fillColor: '#FFF8E3',
                         fillOpacity: .4,
                     })
                 }

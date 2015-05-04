@@ -126,8 +126,8 @@ function main() {
             if (e.target.feature.properties.media_count > 0) {
                 openDialog(e.target.feature)
             }
-            ponds = L.geoJson()
-            omnivore.geojson('https://ellencurrin.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds')
+            //ponds = L.geoJson()
+            ponds = omnivore.geojson('https://ellencurrin.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds WHERE plant_id =' + marker.feature.properties.plant_code)
             .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
@@ -148,10 +148,13 @@ function main() {
                 //pondStyle(ponds)  
             })
             .addTo(map)
+	    map.removeLayer(base)
 	    map.setView(e.latlng, 15)
+	    map.addLayer(imagery)
+	    console.log(ponds.getBounds())
+	    console.log(ponds)
+	    //map.fitBounds(ponds.getBounds())
             map.removeLayer(plants)
-            map.removeLayer(base)
-            map.addLayer(imagery)
             
         })
     })

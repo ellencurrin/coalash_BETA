@@ -37,29 +37,14 @@
     <!--MY JS-->
     <script src='js/my.js'></script>
     <!-- MY CSS-->
-    <!--link href="css/style.css" rel="stylesheet"-->
+    <link href="css/style.css" rel="stylesheet">
     
-    <style>
-      html, body, #map {
-        height: 100%;
-        padding: 0;
-        margin: 0;
-      }
-      #map {background-color: #9FB4CC;}
-      button {
-        border-radius: 4px;
-        background-color: #fff;
-      }
-      #resetBt {
-          position: absolute;
-          top: 15px;
-          right: 15px;
-          z-index: 50;
-      }
-    </style>
-
   </head>
   <body>
+    <nav id='menu-ui' class='menu-ui'>
+      <p style="border-bottom:1px solid rgba(0,0,0,0.25); margin: 0; padding: 5px;">Toggle Data: </p>
+      <div style="border-bottom:1px solid rgba(0,0,0,0.25); margin: 0; padding: 10px;"><i class="fa fa-lg fa-circle-o media sp"></i>Multimedia content</div>
+    </nav>
     <div id="map">
       <button id="resetBt" onclick=location.reload()>Reset Map</button>
     </div>

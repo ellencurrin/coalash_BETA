@@ -18,97 +18,99 @@ function main() {
       zoom: 6
     });
   
-    base = L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-base/{z}/{x}/{y}.png', {
+    base = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
+    })
+    /*L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/terrain.day/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+	attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+	subdomains: '1234',
+	mapID: 'newest',
+	app_id: 'Y8m9dK2brESDPGJPdrvs',
+	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
+	base: 'aerial',
+	maxZoom: 20
+    })*/
+    /*L.tileLayer('http://a{s}.acetate.geoiq.com/tiles/acetate-base/{z}/{x}/{y}.png', {
 	attribution: '&copy;2012 Esri & Stamen, Data from OSM and Natural Earth',
 	subdomains: '0123',
 	minZoom: 2,
 	maxZoom: 18
-    }).addTo(map)
+    })*/
+    .addTo(map)
     
     labels = L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/roads_and_labels/{z}/{x}/{y}.png', {
         attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     })
     .setOpacity(.5)
-    .addTo(map)
+    //.addTo(map)
     
     imagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     })
   
-    states = omnivore.geojson('https://ellencurrin.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM all_states')
+    states = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM all_states&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
     .on('ready', function(go) {
             this.eachLayer(function(polygon) {
                 if (polygon.feature.properties.name == 'North Carolina' || polygon.feature.properties.name =='South Carolina' || polygon.feature.properties.name == 'Virginia' || polygon.feature.properties.name =='Tennessee' || polygon.feature.properties.name == 'Georgia' || polygon.feature.properties.name =='Alabama') {
                     polygon.setStyle ( {
-                        color: '#fff', 
+                        color: '#999', 
                         opacity: 1,
-                        weight: 1,
+                        weight: 2,
                         fillColor: '#C3CC8F',//'#C2D193',
-                        fillOpacity: .4,
+                        fillOpacity: 0,
                     });
                     
                     polygon.on('click', function(e){    
                         map.fitBounds(polygon.getBounds())
-                        states.setStyle({
+                        /*states.setStyle({
                             weight: 1,
-                            fillColor: '#C3C3BE',
+                            fillColor: '#C3CC8F',//'#C3C3BE',
                             fillOpacity: .4,
                         });
                         e.layer.setStyle ( {
                             weight: 1, 
-                            fillOpacity: 0, 
-                        });
+                            fillOpacity: .3, 
+                        });*/
                     })
                     polygon.on('mouseover', function(e) {
                         states.setStyle ( {
-                            fillOpacity: .4, 
+                            fillOpacity: 0, 
                         });
                         e.layer.setStyle ( {
-                            fillOpacity: 0, 
+                            fillOpacity: .2, 
                         });
                     });
                     polygon.on('mouseout', function(e) {
                         e.layer.setStyle ( {
-                            fillOpacity: 0, 
+                            fillOpacity: .2, 
                         });
                     });
                 } else {
                     polygon.setStyle ( {
                         color: '#fff', 
                         opacity: 1,
-                        weight: 1,
+                        weight: 0,
                         fillColor: '#FFF8E3',
-                        fillOpacity: .4,
+                        fillOpacity: 0,
                     })
                 }
             })
         })
     .addTo(map)
     
-
-  plants = omnivore.geojson('https://ellencurrin.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashplants')
+  plants = omnivore.geojson("https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashplants WHERE state <> 'KY' AND selc_ltgtn ='No'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349")
   .on('ready', function(go){
     console.log("plants ready")
     this.eachLayer(function(marker) {
         console.log("each plant")
         var color= '#374140'//'rgba(0, 163, 136, 1)' //'#00A388'
-        var border_color
+        var border_color= 'rgba(255, 255, 255, .5)'
         var label = marker.feature.properties.power_plan
-        var content
         var src = []
-        
-        if (marker.feature.properties.selc_ltgtn == "Yes") {
-            color = 'rgba(255, 97, 56, 1)'
-            border_color = 'rgba(255, 255, 255, .5)', //'#FF6138'
-            src.push('http://welovemountainislandlake.files.wordpress.com/2013/01/riverbendcoalash-wbobbit.jpg'),
-            src.push('http://switchboard.nrdc.org/blogs/bhayat/assets_c/2014/02/Dan%20River%20Spill%20Aerial%202%20Photo%20by%20Waterkeeper%20AllianceRick%20Dove-thumb-500x333-14631.jpg')
-            content = marker.feature.properties.power_plan + '</br><img src="' + src[0] + '" style="width: 180px; height: 180px;">',
-            marker.bindLabel(content)
-        } else {
-            color = '#374140'
-            border_color = 'rgba(255, 255, 255, .5)',
-            marker.bindLabel(label)
-        }
+
+        marker.bindLabel(label)
         
         marker.setIcon(L.divIcon( {
             iconSize: [1, 1],
@@ -116,8 +118,6 @@ function main() {
             html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:3px solid ' + border_color +'; height: 20px; width: 20px; padding: 5px; border-radius:50%; background:' +
             color + '"></div>'
         }))
-        /*var label = marker.feature.properties.power_plan
-        marker.bindLabel(label)*/
         var url = marker.feature.properties.factsheet
         
         
@@ -127,7 +127,7 @@ function main() {
                 openDialog(e.target.feature)
             }
             //ponds = L.geoJson()
-            ponds = omnivore.geojson('https://ellencurrin.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds WHERE plant_id =' + marker.feature.properties.plant_code)
+            ponds = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds WHERE plant_id =' + marker.feature.properties.plant_code +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
             .on('ready', function(go) {
                 this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
@@ -141,9 +141,11 @@ function main() {
                         label += '</br> Condition Assessment: '+ polygon.feature.properties.epa_con_as
                         label += '</div>'
                     polygon.bindLabel(label)
-		    polygon.on('click', function(){
-			openDialog("00")
-		    }) 
+		    if (e.target.feature.properties.media_count != null) {
+			polygon.on('click', function(){
+			    openDialog("00")
+			}) 
+		    } 
                 })
                 //pondStyle(ponds)  
             })
@@ -155,14 +157,147 @@ function main() {
 	    console.log(ponds)
 	    //map.fitBounds(ponds.getBounds())
             map.removeLayer(plants)
+	    map.removeLayer(selc_plants)
+	    document.getElementById('menu-ui').style.display = 'none'
             
         })
     })
-  }).addTo(map) 
+    layer = plants
+    var link = document.createElement('a');
+        link.href = '#';
+        link.className = 'active';
+        link.innerHTML = '<i class="fa fa-lg fa-circle others sp"></i>No SELC litigation';
+
+    link.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (map.hasLayer(layer)) {
+            map.removeLayer(layer);
+            this.className = '';
+        } else {
+            map.addLayer(layer);
+            this.className = 'active';
+        }
+    };
+    var layers = document.getElementById('menu-ui')
+    layers.appendChild(link);
+    
+  }).addTo(map)
+  
+  selc_plants = omnivore.geojson("https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashplants WHERE state <> 'KY' AND selc_ltgtn ='Yes'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349")
+  .on('ready', function(go){
+    console.log("plants ready")
+    this.eachLayer(function(marker) {
+        console.log("each plant")
+        var color= '#374140'//'rgba(0, 163, 136, 1)' //'#00A388'
+        var border_color
+        var label = marker.feature.properties.power_plan
+        var content
+	count = marker.feature.properties.media_count
+        
+        color = 'rgba(255, 97, 56, 1)'
+        border_color = 'rgba(255, 255, 255, .5)', //'#FF6138'
+        content = marker.feature.properties.power_plan + '</br>'
+	if (count != null) {
+	    border_color = '#007E85',//'#003685'
+	    media = (marker.feature.properties.media).split(',')
+	    content += '<img src="' + media[0] + '" style="width: 180px; height: 180px;">'
+	}
+        marker.bindLabel(content)
+        
+        marker.setIcon(L.divIcon( {
+            iconSize: [1, 1],
+            popupAnchor: [0, 10], 
+            html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:3px solid ' + border_color +'; height: 20px; width: 20px; padding: 5px; border-radius:50%; background:' +
+            color + '"></div>'
+        }))
+        var url = marker.feature.properties.factsheet
+        
+        
+        marker.on('click', function(e){
+            console.log(e.target.feature.properties.media_count)
+            if (e.target.feature.properties.media_count > 0) {
+                openDialog(e.target.feature)
+            }
+            //ponds = L.geoJson()
+            ponds = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds WHERE plant_id =' + marker.feature.properties.plant_code +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
+            .on('ready', function(go) {
+                this.eachLayer(function(polygon) {
+                    polygon.setStyle ( {
+                            color: '#1334B9',//'#594736', 
+                            opacity: 1,
+                            weight: 3, 
+                            fillColor: '#1334B9',//'#594736',  
+                            fillOpacity: 0
+                    })
+                    var label = '<div>'+ polygon.feature.properties.impoundmen +' | '+polygon.feature.properties.plant_full+''
+                        label += '</br> Condition Assessment: '+ polygon.feature.properties.epa_con_as
+                        label += '</div>'
+                    polygon.bindLabel(label)
+		    if (e.target.feature.properties.media_count != null) {
+			polygon.on('click', function(){
+			    openDialog("00")
+			}) 
+		    }
+                })
+                //pondStyle(ponds)  
+            })
+            .addTo(map)
+	    map.removeLayer(base)
+	    map.addLayer(imagery)
+	    console.log(ponds)
+	    console.log(ponds.getBounds())
+	    map.setView(e.latlng, 15)
+	    //map.fitBounds(ponds.getBounds())
+            map.removeLayer(plants)
+	    map.removeLayer(selc_plants)
+	    document.getElementById('menu-ui').style.display = 'none'
+            
+        })
+    })
+    layer2 = selc_plants
+    var link = document.createElement('a');
+        link.href = '#';
+        link.className = 'active';
+        link.innerHTML = '<i class="fa fa-lg fa-circle selc sp"></i>SELC litigation';
+
+    link.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (map.hasLayer(layer2)) {
+            map.removeLayer(layer2);
+            this.className = '';
+        } else {
+            map.addLayer(layer2);
+            this.className = 'active';
+        }
+    };
+    var layers = document.getElementById('menu-ui')
+    layers.appendChild(link);
+    
+  }).addTo(map)
+  
+  map.on('zoomend', function(){
+            if (map.getZoom()>=13) {
+                map.addLayer(imagery);
+            } else if (map.getZoom()<=10){
+                //map.removeLayer(ponds);
+                map.addLayer(base);
+                //map.addLayer(labels)
+                map.addLayer(plants)
+		map.addLayer(selc_plants)
+                map.removeLayer(imagery);
+                document.getElementById("menu-ui").style.display= "block"
+            }
+    })
+  
+  
 }
 
 function buildPonds(plant) {
-    omnivore.geojson('https://ellencurrin.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds')
+    omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
     .addTo(map)
 }
 
@@ -177,8 +312,7 @@ function openDialog(plant) {
 	//media_array = media.split(',')
 	media_txt = (plant.properties.media_txt).split('&')
     }
-
-    
+        
     title = '<h4 style="color: black; display: inline;">'+ name +'</h4>'
     title += '<a style="font-size: 12px; margin-left: 20px;" href="' + url +'" target="_blank;"><button>more at southeastcoalash.org</button> </a>'
     message = '<ul class="bxslider">'

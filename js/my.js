@@ -2,6 +2,9 @@ var base
 var labels
 var imagery
 var plants
+var box
+var bounds = L.bounds()
+var featurz = []
 
 $( document ).ready(function() {
     console.log("document ready")
@@ -150,12 +153,16 @@ function main() {
                 //pondStyle(ponds)  
             })
             .addTo(map)
+	    
+	    box = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ash_pond_extents WHERE plant_code =' + marker.feature.properties.plant_code +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
+	    .on('ready', function(go) {
+		this.eachLayer(function(polygon) {
+		    map.fitBounds(polygon.getBounds())
+		})
+	    })
+	    
 	    map.removeLayer(base)
-	    map.setView(e.latlng, 15)
 	    map.addLayer(imagery)
-	    console.log(ponds.getBounds())
-	    console.log(ponds)
-	    //map.fitBounds(ponds.getBounds())
             map.removeLayer(plants)
 	    map.removeLayer(selc_plants)
 	    document.getElementById('menu-ui').style.display = 'none'
@@ -214,7 +221,7 @@ function main() {
         }))
         var url = marker.feature.properties.factsheet
         
-        
+
         marker.on('click', function(e){
             console.log(e.target.feature.properties.media_count)
             if (e.target.feature.properties.media_count > 0) {
@@ -223,7 +230,7 @@ function main() {
             //ponds = L.geoJson()
             ponds = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashponds WHERE plant_id =' + marker.feature.properties.plant_code +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
             .on('ready', function(go) {
-                this.eachLayer(function(polygon) {
+             this.eachLayer(function(polygon) {
                     polygon.setStyle ( {
                             color: '#1334B9',//'#594736', 
                             opacity: 1,
@@ -241,15 +248,19 @@ function main() {
 			}) 
 		    }
                 })
-                //pondStyle(ponds)  
+
             })
             .addTo(map)
+	    
+	    box = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ash_pond_extents WHERE plant_code =' + marker.feature.properties.plant_code +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
+	    .on('ready', function(go) {
+		this.eachLayer(function(polygon) {
+		    map.fitBounds(polygon.getBounds())
+		})
+	    })
+	    
 	    map.removeLayer(base)
 	    map.addLayer(imagery)
-	    console.log(ponds)
-	    console.log(ponds.getBounds())
-	    map.setView(e.latlng, 15)
-	    //map.fitBounds(ponds.getBounds())
             map.removeLayer(plants)
 	    map.removeLayer(selc_plants)
 	    document.getElementById('menu-ui').style.display = 'none'

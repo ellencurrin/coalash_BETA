@@ -208,7 +208,7 @@ function main() {
         content = marker.feature.properties.power_plan + '</br>'
 	if (count != null) {
 	    border_color = '#007E85',//'#003685'
-	    media = (marker.feature.properties.media).split(',')
+	    media = (marker.feature.properties.media).split('&')
 	    content += '<img src="' + media[0] + '" style="width: 180px; height: 180px;">'
 	}
         marker.bindLabel(content)
@@ -319,8 +319,7 @@ function openDialog(plant) {
         name = plant.properties.power_plan
         url = plant.properties.seca_url
 	count = plant.properties.media_count
-	media = (plant.properties.media).split(',')
-	//media_array = media.split(',')
+	media = (plant.properties.media).split('&')
 	media_txt = (plant.properties.media_txt).split('&')
     }
         

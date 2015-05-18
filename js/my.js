@@ -14,6 +14,8 @@ $( document ).ready(function() {
     //$('.bxslider').bxSlider();
 });
 
+L.mapbox.accessToken = 'pk.eyJ1IjoiZWxjdXJyIiwiYSI6IkZMekZlUEEifQ.vsXDy4z_bxRXyhSIvBXc2A'
+
 function main() {
     var map = L.map('map', { 
       zoomControl: false,
@@ -115,12 +117,13 @@ function main() {
 
         marker.bindLabel(label)
         
-        marker.setIcon(L.divIcon( {
-            iconSize: [1, 1],
-            popupAnchor: [0, 10], 
-            html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:3px solid ' + border_color +'; height: 20px; width: 20px; padding: 5px; border-radius:50%; background:' +
-            color + '"></div>'
-        }))
+        marker.setIcon(L.mapbox.marker.icon({
+	    'marker-size': 'large',
+	    'marker-symbol': 'danger',
+	    'marker-color': '#374140',
+	    })
+	)
+	
         var url = marker.feature.properties.factsheet
         
         
@@ -173,7 +176,7 @@ function main() {
     var link = document.createElement('a');
         link.href = '#';
         link.className = 'active';
-        link.innerHTML = '<i class="fa fa-lg fa-circle others sp"></i>No SELC litigation';
+        link.innerHTML = '<img style="width: 25px" src="https://api.tiles.mapbox.com/v4/marker/pin-l-danger+374140.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"><p>No SELC litigation</p>';
 
     link.onclick = function(e) {
         e.preventDefault();
@@ -194,17 +197,15 @@ function main() {
   
   selc_plants = omnivore.geojson("https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM coalashplants WHERE state <> 'KY' AND selc_ltgtn ='Yes'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349")
   .on('ready', function(go){
-    console.log("plants ready")
+    //console.log("plants ready")
     this.eachLayer(function(marker) {
         console.log("each plant")
-        var color= '#374140'//'rgba(0, 163, 136, 1)' //'#00A388'
-        var border_color
         var label = marker.feature.properties.power_plan
         var content
 	count = marker.feature.properties.media_count
         
-        color = 'rgba(255, 97, 56, 1)'
-        border_color = 'rgba(255, 255, 255, .5)', //'#FF6138'
+        var color = '#FF6138'
+        var border_color = 'rgba(255, 255, 255, .5)', //'#FF6138'
         content = marker.feature.properties.power_plan + '</br>'
 	if (count != null) {
 	    border_color = '#007E85',//'#003685'
@@ -213,12 +214,13 @@ function main() {
 	}
         marker.bindLabel(content)
         
-        marker.setIcon(L.divIcon( {
-            iconSize: [1, 1],
-            popupAnchor: [0, 10], 
-            html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:3px solid ' + border_color +'; height: 20px; width: 20px; padding: 5px; border-radius:50%; background:' +
-            color + '"></div>'
-        }))
+        marker.setIcon(L.mapbox.marker.icon({
+	    'marker-size': 'large',
+	    'marker-symbol': 'danger',
+	    'marker-color': '#FF6138',
+	    })
+	)
+
         var url = marker.feature.properties.factsheet
         
 
@@ -271,7 +273,7 @@ function main() {
     var link = document.createElement('a');
         link.href = '#';
         link.className = 'active';
-        link.innerHTML = '<i class="fa fa-lg fa-circle selc sp"></i>SELC litigation';
+        link.innerHTML = '<img style="width: 25px" src="https://api.tiles.mapbox.com/v4/marker/pin-l-danger+FF6138.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q">SELC litigation';
 
     link.onclick = function(e) {
         e.preventDefault();

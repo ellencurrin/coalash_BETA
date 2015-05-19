@@ -117,12 +117,19 @@ function main() {
 
         marker.bindLabel(label)
         
-        marker.setIcon(L.mapbox.marker.icon({
+	marker.setIcon(L.divIcon( {
+            iconSize: [1, 1],
+            popupAnchor: [0, 10], 
+            html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:3px solid ' + border_color +'; height: 20px; width: 20px; padding: 5px; border-radius:50%; background:' +
+            color + '"></div>'
+        }))
+	
+        /*marker.setIcon(L.mapbox.marker.icon({
 	    'marker-size': 'large',
 	    'marker-symbol': 'danger',
 	    'marker-color': '#374140',
 	    })
-	)
+	)*/
 	
         var url = marker.feature.properties.factsheet
         
@@ -176,7 +183,8 @@ function main() {
     var link = document.createElement('a');
         link.href = '#';
         link.className = 'active';
-        link.innerHTML = '<img style="width: 25px" src="https://api.tiles.mapbox.com/v4/marker/pin-l-danger+374140.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"><p>No SELC litigation</p>';
+	link.innerHTML = '<i class="fa fa-lg fa-circle others sp"></i>No SELC litigation'
+        //link.innerHTML = '<img style="width: 25px" src="https://api.tiles.mapbox.com/v4/marker/pin-l-danger+374140.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q"><p>No SELC litigation</p>';
 
     link.onclick = function(e) {
         e.preventDefault();
@@ -214,12 +222,19 @@ function main() {
 	}
         marker.bindLabel(content)
         
-        marker.setIcon(L.mapbox.marker.icon({
+	marker.setIcon(L.divIcon( {
+            iconSize: [1, 1],
+            popupAnchor: [0, 10], 
+            html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:3px solid ' + border_color +'; height: 20px; width: 20px; padding: 5px; border-radius:50%; background:' +
+            color + '"></div>'
+        }))
+	
+        /*marker.setIcon(L.mapbox.marker.icon({
 	    'marker-size': 'large',
 	    'marker-symbol': 'danger',
 	    'marker-color': '#FF6138',
 	    })
-	)
+	)*/
 
         var url = marker.feature.properties.factsheet
         
@@ -273,7 +288,8 @@ function main() {
     var link = document.createElement('a');
         link.href = '#';
         link.className = 'active';
-        link.innerHTML = '<img style="width: 25px" src="https://api.tiles.mapbox.com/v4/marker/pin-l-danger+FF6138.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q">SELC litigation';
+	link.innerHTML = '<i class="fa fa-lg fa-circle selc sp"></i>SELC litigation';
+        //link.innerHTML = '<img style="width: 25px" src="https://api.tiles.mapbox.com/v4/marker/pin-l-danger+FF6138.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IlhHVkZmaW8ifQ.hAMX5hSW-QnTeRCMAy9A8Q">SELC litigation';
 
     link.onclick = function(e) {
         e.preventDefault();

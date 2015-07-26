@@ -3,6 +3,16 @@ html, body, #map {
   padding: 0;
   margin: 0;
 }
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 3px;
+}
 #map {background-color: #9FB4CC;}
 button {
   border-radius: 4px;
@@ -11,7 +21,7 @@ button {
 #resetBt {
     position: absolute;
     top: 10px;
-    right: 10px;
+    left: 10px;
     z-index: 5;
     color: black;
     padding: 10px;
@@ -21,47 +31,34 @@ button {
 #resetBt:hover {
         background:#F7F7F7;
         border: 2px solid rgba(0,0,0,0.2);
-        }
-        
-.menu-ui {
+}
+#filters {
+    border:1px solid rgba(0,0,0,0.4);
+    display: block;
+}
+.legend {
+    margin: 5px 5px -10px 5px;
+    font-size: 16px;
+}
+.legend-sub {
+    font-size: 13px;
+    margin: -10px 5px 10px 5px;
+}        
+.ui-select {
   background:#fff;
   position:absolute;
-  top:10px;right:10px;
-  z-index:10;
-  border-radius:4px;
-  border:1px solid rgba(0,0,0,0.4);
+  top:10px;
+  right:10px;
+  z-index:100;
+  padding:10px;
+  border-radius:3px;
   }
-  .menu-ui a {
-    font-size:13px;
-    color:#E0E0E0;
-    display:block;
-    margin:0;
-    padding:10px;
-    padding-bottom: 20px;
-    text-decoration:none;
-    border-bottom:1px solid rgba(0,0,0,0.25);
-    text-align:left;
-    }
-    .menu-ui a:first-child {
-      border-radius:3px 3px 0 0;
-      }
-    .menu-ui a:last-child {
-      border:none;
-      border-radius:0 0 3px 3px;
-      }
-    .menu-ui a:hover {
-      background:#F2F2F2;
-      color:#999;
-      }
-    .menu-ui a.active {
-      background:#fff;
-      color:black;
-      }
-      .menu-ui a.active:hover {
-        background: #F2F2F2; /*#F2F7EE;*/
-        }
+
+.bx-next, .bx-prev {
+  color: black;
+}
 
 .media {line-height: 1em; color: #007E85;}
 .selc {color: rgba(255, 97, 56, 1)}
 .others {color: #374140}
-.sp {margin-right: 10px;}
+.sp {margin-right: 10px; margin-left: 10px;}

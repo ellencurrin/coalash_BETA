@@ -47,11 +47,18 @@
     </nav-->
     <div id='filters' class='ui-select'>
       <p class='legend'>Legend</p><hr>
-      <h6 class='legend-sub'>Litigation pursued by SELC</h6>
+      <h5><i class="fa fa-lg fa-star-o"></i>  Litigation pursued by SELC</h5>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='yes-ltg' value='Yes' onchange='change()'/><label for='yes'><i class="fa fa-lg fa-circle selc sp"></i>yes</label></div>
+                 name='filter' id='yes-ltg' value='Yes' onchange='change()'/><label class="sp" for='yes'>yes</label></div>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='no-ltg' value='No' onchange='change()';/><label for='no'><i class="fa fa-lg fa-circle others sp"></i>no</label></div>
+                 name='filter' id='no-ltg' value='No' onchange='change()';/><label class="sp" for='no'>no</label></div>
+      <h5>Clean-Up</h5>
+      <div><input type='checkbox' checked=checked class='filter'
+                 name='filter' id='clean-progress' value='Yes'/><label class="sp" for='yes'><i class="fa fa-lg fa-circle sp clean1"></i>In Progress</label></div>
+      <div><input type='checkbox' checked=checked class='filter'
+                 name='filter' id='clean-committed' value='No' /><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean2"></i>Committed To</label></div>
+      <div><input type='checkbox' checked=checked class='filter'
+                 name='filter' id='clean-none' value='No'/><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean3"></i>Not Committed To</label></div>
     </div>
     <div id="map">
       <button id="resetBt" onclick='reset()'>Return to Full Map Extent</button>

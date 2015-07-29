@@ -40,10 +40,10 @@ button {
     margin: 5px 5px -10px 5px;
     font-size: 16px;
 }
-.legend-sub {
-    font-size: 13px;
-    margin: -10px 5px 10px 5px;
-}        
+.clean1{color: #1F78B4}
+.clean2{color: #B2DF8A}
+.clean3{color: #CC542E}
+ 
 .ui-select {
   background:#fff;
   position:absolute;

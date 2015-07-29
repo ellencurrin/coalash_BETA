@@ -133,10 +133,12 @@ function addPlants(){
     this.eachLayer(function(marker) {
 	console.log("each plant")
 	var color
-	if (marker.feature.properties.selc_ltgtn =='Yes') {
-	    color = '#FF6138'
+	if (marker.feature.properties.epa_hazard =='Significant') {
+	    color = '#1F78B4'
+	} else if (marker.feature.properties.epa_hazard =='High') {
+	   color= '#B2DF8A' 
 	} else {
-	   color= '#374140' 
+	    color= '#CC542E'
 	}
 	var border_color= 'rgba(255, 255, 255, .5)'
 	var label = marker.feature.properties.power_plan
@@ -151,10 +153,19 @@ function addPlants(){
 	    color + '"></div>'
 	}))*/
 	
-	marker.setIcon(L.mapbox.marker.icon({
-            'marker-color': color,
-            'marker-size': 'small'
-        }))
+	if (marker.feature.properties.selc_ltgtn =='Yes') {
+	    marker.setIcon(L.mapbox.marker.icon({
+		'marker-color': color,
+		'marker-size': 'small',
+		'marker-symbol': 'star',
+	    }))
+	} else {
+	   marker.setIcon(L.mapbox.marker.icon({
+		'marker-color': color,
+		'marker-size': 'small',
+	    }))
+	}
+	
 	
 	var url = marker.feature.properties.factsheet
 
@@ -214,7 +225,7 @@ function openDialog(plant) {
     water = plant.properties.nearest_wa
     
     title = '<h4 style="color: black; display: inline;">'+ name +'</h4>'
-    title += '<a style="font-size: 12px; margin-left: 20px;" href="' + url +'" target="_blank;"><button>more at southeastcoalash.org</button> </a>'
+    title += '<a style="font-size: 12px; margin-left: 20px;" href="' + url +'" target="_blank;"><button style="padding: 0px"><img src="http://www.southeastcoalash.org/widgets/horizontial-5.png" width=175px></button> </a>'
     
     table = '<table>'
     table +='<tr><td>Clean Up:</td><td>'+ cleanUp + '</td></tr>'

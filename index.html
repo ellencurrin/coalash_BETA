@@ -54,11 +54,11 @@
                  name='filter' id='no-ltg' value='No' onchange='change()';/><label class="sp" for='no'>no</label></div>
       <h5>Clean-Up</h5>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='clean-progress' value='Yes'/><label class="sp" for='yes'><i class="fa fa-lg fa-circle sp clean1"></i>In Progress</label></div>
+                 name='filter' id='clean-progress' value='Yes' onchange='change()'/><label class="sp" for='yes'><i class="fa fa-lg fa-circle sp clean1"></i>In Progress</label></div>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='clean-committed' value='No' /><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean2"></i>Committed To</label></div>
+                 name='filter' id='clean-committed' value='No' onchange='change()';/><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean2"></i>Committed To</label></div>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='clean-none' value='No'/><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean3"></i>Not Committed To</label></div>
+                 name='filter' id='clean-none' value='No' onchange='change()';/><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean3"></i>Not Committed To</label></div>
     </div>
     <div id="map">
       <button id="resetBt" onclick='reset()'>Return to Full Map Extent</button>

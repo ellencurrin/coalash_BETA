@@ -316,6 +316,7 @@ function welcome() {
 
 function reset() {
     map.setZoom(6)
+    map.center=[34.2190, -78.5266],
     document.getElementById('filters').style.display = 'block'
 
 }

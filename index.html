@@ -47,18 +47,18 @@
     </nav-->
     <div id='filters' class='ui-select'>
       <p class='legend'>Legend</p><hr>
-      <h5><i class="fa fa-lg fa-star-o"></i>  Litigation pursued by SELC</h5>
+      <h5>Litigation pursued by SELC</h5>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='yes-ltg' value='Yes' onchange='change()'/><label class="sp" for='yes'>yes</label></div>
+                 name='filter' id='yes-ltg' value='Yes' onchange='change()'/><label class="sp" for='yes'><i class="fa fa-lg fa-circle-o"></i>   yes</label></div>
       <div><input type='checkbox' checked=checked class='filter'
                  name='filter' id='no-ltg' value='No' onchange='change()';/><label class="sp" for='no'>no</label></div>
       <h5>Clean-Up</h5>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='clean-progress' value='Yes' onchange='change()'/><label class="sp" for='yes'><i class="fa fa-lg fa-circle sp clean1"></i>In Progress</label></div>
+                 name='filter' id='clean-progress' value='In Progress' onchange='change()'/><label class="sp" for='progress'><i class="fa fa-lg fa-circle sp clean1"></i>In Progress</label></div>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='clean-committed' value='No' onchange='change()';/><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean2"></i>Committed To</label></div>
+                 name='filter' id='clean-committed' value='Committed To' onchange='change()';/><label class="sp" for='committed'><i class="fa fa-lg fa-circle sp clean2"></i>Committed To</label></div>
       <div><input type='checkbox' checked=checked class='filter'
-                 name='filter' id='clean-none' value='No' onchange='change()';/><label class="sp" for='no'><i class="fa fa-lg fa-circle sp clean3"></i>Not Committed To</label></div>
+                 name='filter' id='clean-none' value='Not Committed To' onchange='change()';/><label class="sp" for='none'><i class="fa fa-lg fa-circle sp clean3"></i>Not Committed To</label></div>
     </div>
     <div id="map">
       <button id="resetBt" onclick='reset()'>Return to Full Map Extent</button>

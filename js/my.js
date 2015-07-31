@@ -8,7 +8,7 @@ var bounds = L.bounds()
 var featurz = []
 var filters = document.getElementById('filters');
 var checkboxes = document.getElementsByClassName('filter');
-var on = ['Yes', 'No']
+var on = ['Yes', 'No', 'In Progress', 'Committed To', 'Not Committed To']
 
 $( document ).ready(function() {
     console.log("document ready")
@@ -117,64 +117,105 @@ function main() {
 
 
 function addPlants(){
-    if (on.length == 2) {
-	var query = "SELECT * FROM coalashplants WHERE state <> 'KY' AND selc_ltgtn ='Yes' OR state <> 'KY' AND selc_ltgtn ='No'"
+    var query = "SELECT * FROM southeast_coal_ash_sites WHERE"
+    var clean = ""
+    var dirty= ""
+    //// Account for SELC litigation filter
+    if ($.inArray('Yes', on)==-1) {
+	clean = "AND info_selc_ltgtn <>'FILED' "
+    }
+    if ($.inArray('No', on)==-1) {
+	dirty = "AND info_selc_ltgtn <>'NONE' "
+    }
+    
+    //// Account for Clean-Up filter
+    if ($.inArray('In Progress', on)==-1) {
+	//query += "(info_clean_up <> 'In Progress' "+ clean + dirty +")"
+    } else {
+	query += "(info_clean_up = 'In Progress' "+ clean + dirty +") OR"
+    }
+    if ($.inArray('Committed To', on)==-1) {
+	//query += " OR (info_clean_up <> 'Committed To' "+ clean + dirty +")"
+    } else {
+	query += " (info_clean_up = 'Committed To' "+ clean + dirty +") OR"
+    }
+    if ($.inArray('Not Committed To', on)==-1) {
+	//query += "OR (info_clean_up <> 'Not Committed To' "+ clean + dirty +")"
+    } else {
+	query += " (info_clean_up = 'Not Committed To' "+ clean + dirty +") OR"
+    }
+    
+    query += " info_clean_up = 'foo'"
+    
+    console.log(query)
+    
+    
+    /*if (on.length == 2) {
+	var query = "SELECT * FROM southeast_coal_ash_sites WHERE info_selc_ltgtn ='FILED' OR info_selc_ltgtn ='NONE'"
     } else {
 	if (on[0]=='Yes') {
-	    var query = "SELECT * FROM coalashplants WHERE state <> 'KY' AND selc_ltgtn ='Yes'"
+	    var query = "SELECT * FROM southeast_coal_ash_sites WHERE info_selc_ltgtn ='FILED'"
 	} else {
-	    var query = "SELECT * FROM coalashplants WHERE state <> 'KY' AND selc_ltgtn ='No'"
+	    var query = "SELECT * FROM southeast_coal_ash_sites WHERE info_selc_ltgtn ='NONE'"
 	    
 	}
-    }
+    }*/
   plants = L.mapbox.featureLayer("https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=" + query + "&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349")
   .on('ready', function(go){
     console.log(on)
     this.eachLayer(function(marker) {
 	console.log("each plant")
 	var color
-	if (marker.feature.properties.epa_hazard =='Significant') {
-	    color = '#1F78B4'
-	} else if (marker.feature.properties.epa_hazard =='High') {
-	   color= '#B2DF8A' 
+	var border
+	if (marker.feature.properties.info_clean_up =='In Progress') {
+	    color = '#0D5372'
+	} else if (marker.feature.properties.info_clean_up =='Committed To') {
+	   color= '#94B257' 
 	} else {
-	    color= '#CC542E'
+	    color= '#EDDC88'//'#949494'
 	}
-	var border_color= 'rgba(255, 255, 255, .5)'
-	var label = marker.feature.properties.power_plan
+	
+	if (marker.feature.properties.info_selc_ltgtn =='FILED') {
+	   border= '2px solid black' 
+	} else {
+	    border= '2px solid rgba(255, 255, 255, .5)'
+	}
+
+	var label = marker.feature.properties.facility_label
 	var src = []
 
 	marker.bindLabel(label)
 	
-	/*marker.setIcon(L.divIcon( {
+	marker.setIcon(L.divIcon( {
 	    iconSize: [1, 1],
 	    popupAnchor: [0, 10], 
-	    html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:3px solid ' + border_color +'; height: 20px; width: 20px; padding: 5px; border-radius:50%; background:' +
+	    html: '<div style="margin-top: -10px; margin-left: -10px; text-align:center; color:#fff; border:'+ border +'; height: 18px; width: 18px; padding: 5px; border-radius:50%; background:' +
 	    color + '"></div>'
-	}))*/
+	}))
 	
-	if (marker.feature.properties.selc_ltgtn =='Yes') {
+	/*if (marker.feature.properties.info_selc_ltgtn =='FILED') {
 	    marker.setIcon(L.mapbox.marker.icon({
 		'marker-color': color,
 		'marker-size': 'small',
 		'marker-symbol': 'star',
+		'marker-outline': '5px solid black',
 	    }))
 	} else {
 	   marker.setIcon(L.mapbox.marker.icon({
 		'marker-color': color,
 		'marker-size': 'small',
 	    }))
-	}
+	}*/
 	
 	
-	var url = marker.feature.properties.factsheet
+	var url = marker.feature.properties.seca_factsheet_url
 
 	marker.on('click', function(e){
 	    console.log(e.target.feature.properties.media_count)
 	    openDialog(e.target.feature)
 	    ponds.addTo(map)
 	    
-	    box = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ash_pond_extents WHERE plant_code =' + marker.feature.properties.plant_code +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
+	    box = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ash_pond_extents WHERE plant_code =' + marker.feature.properties.facility_camdbs_pid +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
 	    .on('ready', function(go) {
 		this.eachLayer(function(polygon) {
 		    map.fitBounds(polygon.getBounds())
@@ -217,12 +258,12 @@ function buildPonds() {
 
 
 function openDialog(plant) {
-    name = plant.properties.power_plan
-    url = plant.properties.seca_url
+    name = plant.properties.facility_name
+    url = plant.properties.seca_webpage_url
     count = plant.properties.media_count
-    cleanUp = 'tbd' //plant.properties.??
-    ash = 'tbd' //plant.properties.??
-    water = plant.properties.nearest_wa
+    cleanUp = plant.properties.info_clean_up
+    ash = plant.properties.info_gallons_est
+    water = plant.properties.water_nearest
     
     title = '<h4 style="color: black; display: inline;">'+ name +'</h4>'
     title += '<a style="font-size: 12px; margin-left: 20px;" href="' + url +'" target="_blank;"><button style="padding: 0px"><img src="http://www.southeastcoalash.org/widgets/horizontial-5.png" width=175px></button> </a>'

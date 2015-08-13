@@ -40,7 +40,17 @@ function main() {
     .setOpacity(.5)
     //.addTo(map)
     
-    imagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    imagery = /*L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/hybrid.day.mobile/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+	attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+	subdomains: '1234',
+	mapID: 'newest',
+	app_id: 'myapp',
+	app_code: '4567',
+	base: 'aerial',
+	maxZoom: 20
+    });*/
+    
+    L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     })
   
@@ -181,7 +191,7 @@ function addPlants(){
 	    border= '2px solid rgba(255, 255, 255, .5)'
 	}
 
-	var label = marker.feature.properties.facility_label
+	var label = '<div style="font-size: 14px">'+ marker.feature.properties.facility_label +'</div>'
 	var src = []
 
 	marker.bindLabel(label)
@@ -244,9 +254,7 @@ function buildPonds() {
 			    fillColor: '#1334B9',//'#594736',  
 			    fillOpacity: 0
 		    })
-		    var label = '<div>'+ polygon.feature.properties.impoundmen +' | '+polygon.feature.properties.plant_full+''
-			label += '</br> Condition Assessment: '+ polygon.feature.properties.epa_con_as
-			label += '</div>'
+		    var label = '<div style="font-size: 14px">'+ polygon.feature.properties.impoundmen + '</div>'
 		    polygon.bindLabel(label)
 		    //polygon.onclick = openDialog(polygon.feature.properties.plant_full)
 		})
@@ -262,16 +270,16 @@ function openDialog(plant) {
     url = plant.properties.seca_webpage_url
     count = plant.properties.media_count
     cleanUp = plant.properties.info_clean_up
-    ash = plant.properties.info_gallons_est
+    //ash = plant.properties.info_gallons_est
+    utility = plant.properties.facility_utility
     water = plant.properties.water_nearest
     
-    title = '<h4 style="color: black; display: inline;">'+ name +'</h4>'
-    title += '<a style="font-size: 12px; margin-left: 20px;" href="' + url +'" target="_blank;"><button style="padding: 0px"><img src="http://www.southeastcoalash.org/widgets/horizontial-5.png" width=175px></button> </a>'
+    title = '<h3 style="color: black; display: inline;">'+ name +'</h3>'
     
     table = '<table>'
-    table +='<tr><td>Clean Up:</td><td>'+ cleanUp + '</td></tr>'
-    table +='<tr><td>Total Ash:</td><td>'+ ash + '</td></tr>'
-    table +='<tr><td>Nearest Water:</td><td>'+ water + '</td></tr>'
+    table +='<tr><td><b>Utility:</b></td><td>'+ utility + '</td></tr>'
+    table +='<tr><td><b>Clean Up Status:</b></td><td>'+ cleanUp + '</td></tr>'
+    table +='<tr><td><b>Vulnerable Waters:</b></td><td>'+ water + '</td></tr>'
     table += '</table>'
     
     //title += table
@@ -298,6 +306,11 @@ function openDialog(plant) {
 	}
 	
 	message += '</ul>'
+	message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
+
+    } else {
+	message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
+
     }
     
     /*if (plant.properties.media_count > 1) {

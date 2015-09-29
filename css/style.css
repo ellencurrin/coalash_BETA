@@ -3,6 +3,10 @@ html, body, #map {
   padding: 0;
   margin: 0;
 }
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 table {
     border: 0px solid black;
     border-collapse: collapse;
@@ -44,7 +48,7 @@ button.secoalash {
     display: block;
 }
 .legend {
-    margin: 5px 5px -10px 5px;
+    margin: 5px 5px 5px 5px;
     font-size: 16px;
 }
 .clean1{color: #0D5372}

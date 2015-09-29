@@ -100,34 +100,34 @@ function main() {
     buildPonds()
     
     map.on('zoomend', function() {
-            if (map.getZoom()>11) {
-		ponds.eachLayer(function(polygon) {
-		    polygon.setStyle({
-			opacity: 1,
-		    })
-		})
-		document.getElementById('filters').style.display = 'none'
-            } else if (map.getZoom()>8) {
-                map.removeLayer(base)
-		map.addLayer(imagery)
-		map.addLayer(ponds)
-		ponds.eachLayer(function(polygon) {
-		    polygon.setStyle({
-			opacity: 0,
-		    })
-		})
-		document.getElementById('filters').style.display = 'block'
+        if (map.getZoom()>11) {
+    		ponds.eachLayer(function(polygon) {
+    		    polygon.setStyle({
+    			opacity: 1,
+    		    })
+    		})
+    		//document.getElementById('filters').style.display = 'none'
+        } else if (map.getZoom()>8) {
+            map.removeLayer(base)
+    		map.addLayer(imagery)
+    		map.addLayer(ponds)
+    		ponds.eachLayer(function(polygon) {
+    		    polygon.setStyle({
+    			opacity: 0,
+    		    })
+    		})
+    		//document.getElementById('filters').style.display = 'block'
 	    } else if (map.getZoom()<=8){
-                map.removeLayer(imagery)
-		map.removeLayer(ponds)
-		map.addLayer(base)
-            }
+            map.removeLayer(imagery)
+    		map.removeLayer(ponds)
+    		map.addLayer(base)
+        }
     })
 }
 
 
 function addPlants(){
-    var query = "SELECT * FROM southeast_coal_ash_sites WHERE"
+    var query = "SELECT * FROM southeast_coal_ash_sites_update WHERE"
     var clean = ""
     var dirty= ""
     //// Account for SELC litigation filter
@@ -142,20 +142,20 @@ function addPlants(){
     if ($.inArray('In Progress', on)==-1) {
 	//query += "(info_clean_up <> 'In Progress' "+ clean + dirty +")"
     } else {
-	query += "(info_clean_up = 'In Progress' "+ clean + dirty +") OR"
+	query += "(info_cleanup = 'In Progress' "+ clean + dirty +") OR"
     }
     if ($.inArray('Committed To', on)==-1) {
 	//query += " OR (info_clean_up <> 'Committed To' "+ clean + dirty +")"
     } else {
-	query += " (info_clean_up = 'Committed To' "+ clean + dirty +") OR"
+	query += " (info_cleanup = 'Committed To' "+ clean + dirty +") OR"
     }
     if ($.inArray('Not Committed To', on)==-1) {
 	//query += "OR (info_clean_up <> 'Not Committed To' "+ clean + dirty +")"
     } else {
-	query += " (info_clean_up = 'Not Committed To' "+ clean + dirty +") OR"
+	query += " (info_cleanup = 'Not Committed To' "+ clean + dirty +") OR"
     }
     
-    query += " info_clean_up = 'foo'"
+    query += " info_cleanup = 'foo'"
     
     console.log(query)
     
@@ -177,9 +177,9 @@ function addPlants(){
 	console.log("each plant")
 	var color
 	var border
-	if (marker.feature.properties.info_clean_up =='In Progress') {
+	if (marker.feature.properties.info_cleanup =='In Progress') {
 	    color = '#0D5372'
-	} else if (marker.feature.properties.info_clean_up =='Committed To') {
+	} else if (marker.feature.properties.info_cleanup =='Committed To') {
 	   color= '#94B257' 
 	} else {
 	    color= '#EDDC88'//'#949494'
@@ -225,7 +225,7 @@ function addPlants(){
 	    openDialog(e.target.feature)
 	    ponds.addTo(map)
 	    
-	    box = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ash_pond_extents WHERE plant_code =' + marker.feature.properties.facility_camdbs_pid +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
+	    box = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ash_pond_extents WHERE plant_code =' + marker.feature.properties.facility_camdbs +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
 	    .on('ready', function(go) {
 		this.eachLayer(function(polygon) {
 		    map.fitBounds(polygon.getBounds())
@@ -235,7 +235,7 @@ function addPlants(){
 	    map.removeLayer(base)
 	    map.addLayer(imagery)
 	    //map.removeLayer(plants)
-	    document.getElementById('filters').style.display = 'none'
+	    //document.getElementById('filters').style.display = 'none'
 	    
 	})
     })
@@ -256,11 +256,8 @@ function buildPonds() {
 		    })
 		    var label = '<div style="font-size: 14px">'+ polygon.feature.properties.impoundmen + '</div>'
 		    polygon.bindLabel(label)
-		    //polygon.onclick = openDialog(polygon.feature.properties.plant_full)
 		})
-		//pondStyle(ponds)  
 	    })
-    //.addTo(map)
 }
 
 
@@ -269,9 +266,8 @@ function openDialog(plant) {
     name = plant.properties.facility_name
     url = plant.properties.seca_webpage_url
     count = plant.properties.media_count
-    cleanUp = plant.properties.info_clean_up
-    //ash = plant.properties.info_gallons_est
-    utility = plant.properties.facility_utility
+    cleanUp = plant.properties.info_cleanup
+    utility = plant.properties.facility_own
     water = plant.properties.water_nearest
     
     title = '<h3 style="color: black; display: inline;">'+ name +'</h3>'
@@ -281,36 +277,33 @@ function openDialog(plant) {
     table +='<tr><td><b>Clean Up Status:</b></td><td>'+ cleanUp + '</td></tr>'
     table +='<tr><td><b>Vulnerable Waters:</b></td><td>'+ water + '</td></tr>'
     table += '</table>'
-    
-    //title += table
-    
+        
     message = table + '<br>'
     
     if (plant.properties.media_count > 1) {
-	message += '<div style="width: 100%; font-color: black;>'
-	message += '<span style="float: left;" id="slider-prev"></span>'
-	message += '<span style="float: right;" id="slider-next"></span>'
-	message += '</div>'
+    	message += '<div style="width: 100%; font-color: black;>'
+    	message += '<span style="float: left;" id="slider-prev"></span>'
+    	message += '<span style="float: right;" id="slider-next"></span>'
+    	message += '</div>'
     }
     
     if (plant.properties.media_count != null) {
 	
-	media = (plant.properties.media).split('&')
-	media_txt = (plant.properties.media_txt).split('&')
-        
-	message += '<ul class="bxslider">'
-	
-	
-	for (i = 0; i < media.length; i++) {
-	    message += '<li><img src="' + media[i] + '" style="width: 100%"></br><p>'+ media_txt[i] + '</p></li>'
-	}
-	
-	message += '</ul>'
-	message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
+    	media = (plant.properties.media).split('&')
+    	media_txt = (plant.properties.media_txt).split('&')
+            
+    	message += '<ul class="bxslider">'
+    	
+    	
+    	for (i = 0; i < media.length; i++) {
+    	    message += '<li><img src="' + media[i] + '" style="width: 100%"></br><p>'+ media_txt[i] + '</p></li>'
+    	}
+    	
+    	message += '</ul>'
+    	message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
 
     } else {
-	message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
-
+        message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
     }
     
     /*if (plant.properties.media_count > 1) {
@@ -327,15 +320,15 @@ function openDialog(plant) {
     
     var slider = $('.bxslider').bxSlider({
         captions: true,
-	adaptiveHeight: true,
-	nextSelector: '#slider-next',
-	prevSelector: '#slider-prev',
-	nextText: '<p>Next <i class="fa fa-arrow-right"></i></p>',
-	prevText: '<p><i class="fa fa-arrow-left"></i> Previous</p>'
-    })
+    	adaptiveHeight: true,
+    	nextSelector: '#slider-next',
+    	prevSelector: '#slider-prev',
+    	nextText: '<p>Next <i class="fa fa-arrow-right"></i></p>',
+    	prevText: '<p><i class="fa fa-arrow-left"></i> Previous</p>'
+    })  
     
-    var reload = setInterval(function () {slider.reloadSlider()}, 1000)
-    setInterval(function(){clearInterval(reload)}, 2000)
+    //var reload = setInterval(function () {slider.reloadSlider()}, 2000)
+    //setInterval(function(){clearInterval(reload)}, 2000)
 }
 
 function change() {
@@ -369,8 +362,8 @@ function welcome() {
 }
 
 function reset() {
+    console.log("resetting")
     map.setZoom(6)
-    map.center=[34.2190, -78.5266],
-    document.getElementById('filters').style.display = 'block'
-
+    map.panTo(new L.LatLng(34.2190, -78.5266))
 }
+

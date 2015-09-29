@@ -46,12 +46,14 @@
       <div style="border-bottom:1px solid rgba(0,0,0,0.25); margin: 0; padding: 10px;"><i class="fa fa-lg fa-circle-o media sp"></i>Multimedia content</div>
     </nav-->
     <div id='filters' class='ui-select'>
-      <p class='legend'>Legend</p><hr>
+      <p class='legend'>Legend</p>
+      <hr>
       <h5>Litigation pursued by SELC</h5>
       <div><input type='checkbox' checked=checked class='filter'
                  name='filter' id='yes-ltg' value='Yes' onchange='change()'/><label class="sp" for='yes'><i class="fa fa-lg fa-circle-o"></i>   yes</label></div>
       <div><input type='checkbox' checked=checked class='filter'
                  name='filter' id='no-ltg' value='No' onchange='change()';/><label class="sp" for='no'>no</label></div>
+      <hr>           
       <h5>Clean-Up Status</h5>
       <div><input type='checkbox' checked=checked class='filter'
                  name='filter' id='clean-progress' value='In Progress' onchange='change()'/><label class="sp" for='progress'><i class="fa fa-lg fa-circle sp clean1"></i>In Progress</label></div>
@@ -59,6 +61,11 @@
                  name='filter' id='clean-committed' value='Committed To' onchange='change()';/><label class="sp" for='committed'><i class="fa fa-lg fa-circle sp clean2"></i>Committed To</label></div>
       <div><input type='checkbox' checked=checked class='filter'
                  name='filter' id='clean-none' value='Not Committed To' onchange='change()';/><label class="sp" for='none'><i class="fa fa-lg fa-circle sp clean3"></i>Not Committed To</label></div>
+      <hr>
+      <div style="margin-top: 10px;">
+        <i class="fa fa-lg fa-square-o sp" style="margin-left: 0px; color: red;"></i>
+        <h5 style="display: inline">Coal Ash Impoundments</h5>
+      </div>
     </div>
     <div id="map">
       <button id="resetBt" onclick='reset()'>Return to Full Map Extent</button>

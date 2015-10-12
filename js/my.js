@@ -9,6 +9,7 @@ var featurz = []
 var filters = document.getElementById('filters');
 var checkboxes = document.getElementsByClassName('filter');
 var on = ['Yes', 'No', 'In Progress', 'Committed To', 'Not Committed To']
+var firstTime = true;
 
 $( document ).ready(function() {
     console.log("document ready")
@@ -223,7 +224,6 @@ function addPlants(){
 	marker.on('click', function(e){
 	    console.log(e.target.feature.properties.media_count)
 	    openDialog(e.target.feature)
-	    ponds.addTo(map)
 	    
 	    box = omnivore.geojson('https://jovianpfeil.cartodb.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM ash_pond_extents WHERE plant_code =' + marker.feature.properties.facility_camdbs +'&api_key=a761ed63432c22a255c06266b41e09a4b5cc7349')
 	    .on('ready', function(go) {
@@ -234,6 +234,7 @@ function addPlants(){
 	    
 	    map.removeLayer(base)
 	    map.addLayer(imagery)
+        ponds.addTo(map)
 	    //map.removeLayer(plants)
 	    //document.getElementById('filters').style.display = 'none'
 	    
@@ -269,6 +270,18 @@ function openDialog(plant) {
     cleanUp = plant.properties.info_cleanup
     utility = plant.properties.facility_own
     water = plant.properties.water_nearest
+    media = []
+    media_txt = []
+
+    if (plant.properties.media.length > 0) {
+        media = (plant.properties.media).split('&')
+    }
+    if (plant.properties.media_txt.length > 0) {
+        media_txt = (plant.properties.media_txt).split('&')
+    }
+
+    console.log(media.length)
+    console.log(media_txt.length)
     
     title = '<h3 style="color: black; display: inline;">'+ name +'</h3>'
     
@@ -286,25 +299,33 @@ function openDialog(plant) {
     	message += '<span style="float: right;" id="slider-next"></span>'
     	message += '</div>'
     }
-    
-    if (plant.properties.media_count != null) {
-	
-    	media = (plant.properties.media).split('&')
-    	media_txt = (plant.properties.media_txt).split('&')
-            
+
+        /// BEGIN IF STATEMENT
+    if (plant.properties.media_count != null) {    
     	message += '<ul class="bxslider">'
-    	
-    	
-    	for (i = 0; i < media.length; i++) {
-    	    message += '<li><img src="' + media[i] + '" style="width: 100%"></br><p>'+ media_txt[i] + '</p></li>'
+
+    	for (i = 0; i < plant.properties.media_count; i++) {
+            message += '<li>'
+            if (media.length >= 1)   {
+                console.log(media)
+                message += '<img src="' + media[i] + '" style="width: 100%">'
+            }
+            if (media_txt.length >= 1)   {
+                console.log(media_txt)
+                message += '</br><p>'+ media_txt[i] + '</p>'            
+            }
+            message += '</li>'
     	}
     	
     	message += '</ul>'
-    	message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
-
-    } else {
-        message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
     }
+        //// END IF STATEMENT
+
+    message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
+
+    /*} else {
+        message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
+    }*/
     
     /*if (plant.properties.media_count > 1) {
 	message += '<div style="width: 100%; margin-top: -50px; padding-bottom: 25px;">'
@@ -312,20 +333,31 @@ function openDialog(plant) {
 	message += '<span style="position: absolute; right:10px;" id="slider-next"></span>'
 	message += '</div>'
     }*/
+
+    console.log(message)
     
-    bootbox.dialog({
+    var dialog = bootbox.dialog({
             message: message,
-            title: title
+            title: title,
+            onEscape: function(){firstTime = true;}
+    })
+
+    $(document).on("shown.bs.modal", function(){
+        if (firstTime){
+            var slider = $('.bxslider').bxSlider({
+                captions: true,
+                adaptiveHeight: true,
+                nextSelector: '#slider-next',
+                prevSelector: '#slider-prev',
+                nextText: '<p>Next <i class="fa fa-arrow-right"></i></p>',
+                prevText: '<p><i class="fa fa-arrow-left"></i> Previous</p>'
+            })  
+            firstTime = false;
+        }
+
     })
     
-    var slider = $('.bxslider').bxSlider({
-        captions: true,
-    	adaptiveHeight: true,
-    	nextSelector: '#slider-next',
-    	prevSelector: '#slider-prev',
-    	nextText: '<p>Next <i class="fa fa-arrow-right"></i></p>',
-    	prevText: '<p><i class="fa fa-arrow-left"></i> Previous</p>'
-    })  
+
     
     //var reload = setInterval(function () {slider.reloadSlider()}, 2000)
     //setInterval(function(){clearInterval(reload)}, 2000)

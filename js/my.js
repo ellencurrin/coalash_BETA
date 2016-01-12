@@ -320,9 +320,11 @@ function openDialog(plant) {
     	message += '</ul>'
     }
         //// END IF STATEMENT
-
-    message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
-
+    message += '<div style="margin-left: 10%"">'
+    message += '<button class="secoalash" data-dismiss="modal" >Explore the map</button>'
+    message += '<p style="display: inline-block;"><b> OR </b></p>'
+    message += '<a style="font-size: 12px; color: black;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
+    message += '</div>'
     /*} else {
         message += '<a style="font-size: 12px;" href="' + url +'" target="_blank;"><button class="secoalash">Learn more at southeastcoalash.org</button> </a>'
     }*/

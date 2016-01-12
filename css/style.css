@@ -25,8 +25,9 @@ button {
 
 button.secoalash {
   padding: 10px;
-  margin-left: 30%;
+  margin: 10px;
   font-size: 14px;
+  display: inline-block;
 }
 
 #resetBt {

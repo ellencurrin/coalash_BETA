@@ -379,8 +379,7 @@ function change() {
 }
 
 function welcome() {
-    heading = '<img src="https://www.southernenvironment.org/assets/images/logo-header.png">'
-    heading += '</br></br><h3 style="text-align: center; margin: auto;">Welcome to the Interactive Coal Ash Map</h3>'
+    heading = '</br></br><h3 style="text-align: center; margin: auto;">Welcome to the Interactive Coal Ash Map</h3>'
     body = '<p style="color: red;"><b>DISCLAIMER: This is a concept map and IS NO LONGER MAINTAINED as a source of reference. Thank you! </b></p>'
     body += '<p><b>What is coal ash?</b></p>'
     body += '<p>Nearly every major river in the Southeast has one or more lagoons on its banks holding slurries of coal ash from power plants. Containing hundreds of thousands of tons of toxin-laden waste, these pools are often unlined and have leaked arsenic, mercury, thallium, selenium, and other contaminants into the rivers and the underlying groundwater for years, if not decades.</p>'
@@ -388,7 +387,7 @@ function welcome() {
     body += '<p><b>How to use this map</b></p>'
     body += '<p>Click on a marker to learn more about the coal-fired power plant it represents, and to explore the coal ash lagoons it produces. Find out about contamination, clean-up, and litigation.</p>'
     body += '<p><b>Find out more</b></p>'
-    body += '<p>Find out more about coal ash at <a href="https://www.southernenvironment.org/cases-and-projects/coal-waste">southernenvironment.org</a>.</p>'
+    body += '<p>Learn the latest information regarding SELC’s work to clean-up coal ash at <a href="https://www.southernenvironment.org/cases-and-projects/coal-waste">southernenvironment.org</a>.</p>'
     
     bootbox.dialog({
             message: body,
